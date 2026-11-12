@@ -8,6 +8,7 @@ using ZombieParty.Utility;
 using ZombieParty.ViewModels;
 using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace ZombieParty.Controllers
 {
@@ -176,6 +177,30 @@ namespace ZombieParty.Controllers
             zombieVM.ZombieTypeSelectList = (IEnumerable<SelectListItem>?)_serviceZT.ListZombieTypeDisponible();
 
             return View(zombieVM);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Favorite(int id)
+        {
+            Zombie zombie = await _serviceZ.GetByIdAsync(id);
+            if (zombie == null)
+            {
+                return NotFound($"Could not found zombie with id: {id}");
+                
+            }
+            zombie.IsFavorite = !zombie.IsFavorite;
+            _baseDonnees.Update(zombie);
+            await _baseDonnees.SaveChangesAsync();
+            return Json(zombie.IsFavorite);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Details(int id)
+        {
+            Zombie zombie = await _serviceZ.GetByIdAsync(id);
+            if (zombie == null)
+            {
+                return NotFound($"Could not found zombie with id: {id}");
+            }
+            return PartialView("_ZombieDetails", zombie);
         }
     }
 }

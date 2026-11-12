@@ -1,5 +1,38 @@
 ﻿@model IEnumerable<Zombie>
 
+@section Scripts{
+    <script>
+        $(".favorite".on("click", function(){
+            let baliseA = $(this);      //Aller chercher l'élément <a> qui a été cliqué
+            //console.log           //Validation qu'on obtient bien l'élément voulu
+//(voir console navigateur)
+        let idZombie = baliseA.attr("id");      //Obtenir l'id en utilisant attr sur l'élément <a> cliqué
+        //console.log(idZombie)         //Validation
+        $.post("/Zombie/Favorite", {"id" : idZombie}, // Construction de la requête post car on modifie les données
+        function(data){
+            // console.log(data)    //Validation
+            if(data){
+                baliseA.removeClass("text-dark");
+                baliseA.addClass("text-primary");
+            } else{
+                baliseA.removeClass("text-primary");
+                baliseA.addClass("text-dark");
+            }
+        });
+        });
+
+
+        $("detail-btn").on("click", function(){
+            let btn = $(this);
+            let idZombie = btn.attr("id");
+            $.get("/Zombie/Details", {"id:" : idZombie},
+            function(data){
+                $("#showmodal #content").html(data);
+                $("#showmodal").modal("show")
+            });
+        });
+    </script>
+}
 <div class="container p-3">
     <div class="row pt-4">
         <div class="col-10">

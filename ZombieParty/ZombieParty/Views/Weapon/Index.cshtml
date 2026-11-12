@@ -9,6 +9,12 @@
 <p>
     <a class="btn btn-success" asp-action="Upsert"><i class="fas fa-plus-square"></i>&nbsp;@Locals["New"]</a>
 </p>
+<script>
+    $("tr.WeaponList")
+    .on("mouseenter", function() { $(this).addClass("highlight"); })
+    .on("mouseleave", function() { $(this).removeClass("highlight"); });
+</script>
+
 <table class="table bg-white shadow ">
     <thead>
         <tr>
